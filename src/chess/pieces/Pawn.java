@@ -20,10 +20,12 @@ public class Pawn extends ChessPiece {
             auxiliaryPosition.setValues(position.getRow() - 1, position.getColumn());
             if (getBoard().positionExists(auxiliaryPosition) && !getBoard().thereIsAPiece(auxiliaryPosition)) {
                 movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
-            }
-            auxiliaryPosition.setValues(position.getRow() - 2, position.getColumn());
-            if (getBoard().positionExists(auxiliaryPosition) && !getBoard().thereIsAPiece(auxiliaryPosition) && getMoveCount() == 0) {
-                movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
+                if (getMoveCount() == 0) {
+                    auxiliaryPosition.setValues(position.getRow() - 2, position.getColumn());
+                    if (getBoard().positionExists(auxiliaryPosition) && !getBoard().thereIsAPiece(auxiliaryPosition)) {
+                        movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
+                    }
+                }
             }
             auxiliaryPosition.setValues(position.getRow() - 1, position.getColumn() - 1);
             if (getBoard().positionExists(auxiliaryPosition) && isThereOpponentPiece(auxiliaryPosition)) {
@@ -37,10 +39,12 @@ public class Pawn extends ChessPiece {
             auxiliaryPosition.setValues(position.getRow() + 1, position.getColumn());
             if (getBoard().positionExists(auxiliaryPosition) && !getBoard().thereIsAPiece(auxiliaryPosition)) {
                 movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
-            }
-            auxiliaryPosition.setValues(position.getRow() + 2, position.getColumn());
-            if (getBoard().positionExists(auxiliaryPosition) && !getBoard().thereIsAPiece(auxiliaryPosition) && getMoveCount() == 0) {
-                movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
+                if (getMoveCount() == 0) {
+                    auxiliaryPosition.setValues(position.getRow() + 2, position.getColumn());
+                    if (getBoard().positionExists(auxiliaryPosition) && !getBoard().thereIsAPiece(auxiliaryPosition) && getMoveCount() == 0) {
+                        movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
+                    }
+                }
             }
             auxiliaryPosition.setValues(position.getRow() + 1, position.getColumn() - 1);
             if (getBoard().positionExists(auxiliaryPosition) && isThereOpponentPiece(auxiliaryPosition)) {
