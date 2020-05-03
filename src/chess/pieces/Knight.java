@@ -5,15 +5,15 @@ import boardGame.Position;
 import chess.ChessPiece;
 import chess.Color;
 
-public class King extends ChessPiece {
+public class Knight extends ChessPiece {
 
-    public King(Board board, Color color) {
+    public Knight(Board board, Color color) {
         super(board, color);
     }
 
     @Override
     public String toString() {
-        return "K";
+        return "N";
     }
 
     @Override
@@ -21,43 +21,35 @@ public class King extends ChessPiece {
         boolean[][] movesMatrix = new boolean[getBoard().getRows()][getBoard().getColumns()];
         Position auxiliaryPosition = new Position(0, 0);
 
-        //up
-        auxiliaryPosition.setValues((position.getRow() - 1), position.getColumn());
+        auxiliaryPosition.setValues((position.getRow() - 1), position.getColumn() - 2);
         if (getBoard().positionExists(auxiliaryPosition) && canMove(auxiliaryPosition)) {
             movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
         }
-        //down
-        auxiliaryPosition.setValues((position.getRow() + 1), position.getColumn());
+        auxiliaryPosition.setValues((position.getRow() - 1), position.getColumn() + 2);
         if (getBoard().positionExists(auxiliaryPosition) && canMove(auxiliaryPosition)) {
             movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
         }
-        //left
-        auxiliaryPosition.setValues(position.getRow(), (position.getColumn() - 1));
+        auxiliaryPosition.setValues(position.getRow() + 1, (position.getColumn() - 2));
         if (getBoard().positionExists(auxiliaryPosition) && canMove(auxiliaryPosition)) {
             movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
         }
-        //right
-        auxiliaryPosition.setValues(position.getRow(), (position.getColumn() + 1));
+        auxiliaryPosition.setValues(position.getRow() + 1, (position.getColumn() + 2));
         if (getBoard().positionExists(auxiliaryPosition) && canMove(auxiliaryPosition)) {
             movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
         }
-        //up-left
-        auxiliaryPosition.setValues((position.getRow() - 1), (position.getColumn() - 1));
+        auxiliaryPosition.setValues((position.getRow() - 2), (position.getColumn() - 1));
         if (getBoard().positionExists(auxiliaryPosition) && canMove(auxiliaryPosition)) {
             movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
         }
-        //up-right
-        auxiliaryPosition.setValues((position.getRow() - 1), (position.getColumn() + 1));
+        auxiliaryPosition.setValues((position.getRow() - 2), (position.getColumn() + 1));
         if (getBoard().positionExists(auxiliaryPosition) && canMove(auxiliaryPosition)) {
             movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
         }
-        //down-left
-        auxiliaryPosition.setValues((position.getRow() + 1), (position.getColumn() - 1));
+        auxiliaryPosition.setValues((position.getRow() + 2), (position.getColumn() - 1));
         if (getBoard().positionExists(auxiliaryPosition) && canMove(auxiliaryPosition)) {
             movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
         }
-        //down-right
-        auxiliaryPosition.setValues((position.getRow() + 1), (position.getColumn() + 1));
+        auxiliaryPosition.setValues((position.getRow() + 2), (position.getColumn() + 1));
         if (getBoard().positionExists(auxiliaryPosition) && canMove(auxiliaryPosition)) {
             movesMatrix[auxiliaryPosition.getRow()][auxiliaryPosition.getColumn()] = true;
         }
