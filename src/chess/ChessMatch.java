@@ -5,6 +5,7 @@ import boardGame.Piece;
 import boardGame.Position;
 import chess.pieces.*;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ public class ChessMatch {
     private boolean check;
     private boolean checkMate;
     private ChessPiece enPassantVulnerable;
+    private ChessPiece promoted;
     private Color currentPlayer;
     private Board board;
     private List<Piece> piecesOnTheBoard = new ArrayList<>();
@@ -44,6 +46,9 @@ public class ChessMatch {
     public ChessPiece getEnPassantVulnerable() {
         return enPassantVulnerable;
     }
+    public ChessPiece getPromoted() {
+        return promoted;
+    }
     public boolean getCheck() {
         return check;
     }
@@ -63,13 +68,24 @@ public class ChessMatch {
         validateOriginPosition(origin);
         validateTargetPosition(origin, target);
         Piece capturedPiece = makeMove(origin, target);
+
+        ChessPiece movedPiece = (ChessPiece)board.piece(target);
+
+        //Promotion
+        promoted = null;
+        if (movedPiece instanceof Pawn) {
+            if ((movedPiece.getColor() == Color.WHITE && target.getRow() == 0) || (movedPiece.getColor() == Color.BLACK && target.getRow() == 7)) {
+                promoted = (ChessPiece)board.piece(target);
+                promoted = replacePromotedPiece("Q");
+            }
+        }
+
         if (testCheck(currentPlayer)) {
             undoMove(origin, target, capturedPiece);
             throw new ChessException("You can't put yourself in check.");
         }
 
         //En Passant
-        ChessPiece movedPiece = (ChessPiece)board.piece(target);
         if (movedPiece instanceof Pawn && ((target.getRow() == origin.getRow() + 2) || (target.getRow() == origin.getRow() - 2))) {
             enPassantVulnerable = movedPiece;
         } else {
@@ -244,6 +260,33 @@ public class ChessMatch {
         piecesOnTheBoard.add(piece);
     }
 
+    public ChessPiece replacePromotedPiece(String pieceType) {
+        pieceType = pieceType.toLowerCase();
+        if (promoted == null) {
+            throw new IllegalStateException("There is no piece to be promoted.");
+        }
+        if (!pieceType.equals("b") && !pieceType.equals("n") && !pieceType.equals("r") && !pieceType.equals("q")) {
+            throw new InvalidParameterException("Invalid choice for promotion.");
+        }
+
+        Position position = promoted.getChessPosition().toPosition();
+        Piece piece = board.removePiece(position);
+        piecesOnTheBoard.remove(piece);
+
+        ChessPiece newPiece = newPiece(pieceType, promoted.getColor());
+        board.placePiece(newPiece, position);
+        piecesOnTheBoard.add(newPiece);
+
+        return newPiece;
+    }
+
+    private ChessPiece newPiece(String pieceType, Color color) {
+        if (pieceType.equals("b")) return new Bishop(board, color);
+        if (pieceType.equals("n")) return new Knight(board, color);
+        if (pieceType.equals("r")) return new Rook(board, color);
+        return new Queen(board, color);
+    }
+
     private void nextTurn() {
         turn++;
         currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
@@ -270,14 +313,14 @@ public class ChessMatch {
         placeNewPiece('h', 1, new Rook(board, Color.WHITE));
 
         //Black pieces
-        placeNewPiece('a', 7, new Pawn(board, Color.BLACK, this));
+        /*placeNewPiece('a', 7, new Pawn(board, Color.BLACK, this));
         placeNewPiece('b', 7, new Pawn(board, Color.BLACK, this));
         placeNewPiece('c', 7, new Pawn(board, Color.BLACK, this));
         placeNewPiece('d', 7, new Pawn(board, Color.BLACK, this));
         placeNewPiece('e', 7, new Pawn(board, Color.BLACK, this));
         placeNewPiece('f', 7, new Pawn(board, Color.BLACK, this));
         placeNewPiece('g', 7, new Pawn(board, Color.BLACK, this));
-        placeNewPiece('h', 7, new Pawn(board, Color.BLACK, this));
+        placeNewPiece('h', 7, new Pawn(board, Color.BLACK, this));*/
 
         placeNewPiece('a', 8, new Rook(board, Color.BLACK));
         //placeNewPiece('b', 8, new Knight(board, Color.BLACK));

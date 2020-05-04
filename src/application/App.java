@@ -37,6 +37,12 @@ public class App {
                 if (capturedPiece != null) {
                     capturedPieces.add(capturedPiece);
                 }
+
+                if (chessMatch.getPromoted() != null) {
+                    System.out.print("Enter type of piece for promotion (B/N/R/Q):");
+                    String pieceType = input.nextLine();
+                    chessMatch.replacePromotedPiece(pieceType);
+                }
             } catch (ChessException exception) {
                 System.out.print(exception.getMessage());
                 input.nextLine();
